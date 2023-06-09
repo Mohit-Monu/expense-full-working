@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="../public/signup.css">
+</head>
+
+<body>
+    <form id="form">
+        <div class="login-box">
+            <div class="login-header">
+                <header>Sign up</header>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Name" autocomplete="off" required id="nam">
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Email" autocomplete="off" required id="emai">
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Password" autocomplete="off" required
+                    id="passwor">
+            </div>
+            <header id="emailalread"></header>
+            <div class="input-submit">
+                <button class="submit-btn" id="submit"></button>
+                <label for="submit">Sign Up</label>
+            </div>
+    </form>
+    <div class="sign-up-link">
+        <p>Already have account? <a href="./sign_in.html">Sign In</a></p>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.getElementById('form').addEventListener('submit', adduser);
+    async function adduser(e) {
+        e.preventDefault();
+
+        var name = document.getElementById('nam').value
+        var email = document.getElementById('emai').value
+        var password = document.getElementById('passwor').value
+
+        const config = await {
+            url: "http://localhost:3000/user/signup",
+            method: "POST",
+            data: {
+                'name': name,
+                'email': email,
+                'password': password
+            }
+        }
+        await axios(config)
+            .then((data) => {
+                console.log(data)
+                if (data.status == 201) {
+
+                    var emailalready = document.getElementById('emailalread')
+                    emailalready.innerHTML = "account created successfully"
+                    emailalready.style.color = 'green'
+                    console.log("updated")
+
+                }
+            }).catch((err) => {
+                var emailalready = document.getElementById('emailalread')
+                emailalready.innerHTML = "Email Already exist"
+                emailalready.style.color = 'red'
+                console.log('Email Already exist')
+            })
+
+    }
+</script>
+
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignIn</title>
+    <link rel="stylesheet" href="../public/signup.css">
+</head>
+<body>
+    <form id="form">
+        <div class="login-box">
+            <div class="login-header">
+                <header>Sign in</header>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Email" autocomplete="off" required id="emai">
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Password" autocomplete="off" required
+                    id="passwor">
+            </div>
+            <div class="forgot">
+                <section>
+                    <input type="checkbox" id="check">
+                    <label for="check">Remember me</label>
+                </section>
+                <section>
+                    <a href="./forgetpass.html">Forgot password</a>
+                </section>
+            </div>
+            <header id="wrongpasswor"></header>
+            <div class="input-submit">
+                <button class="submit-btn" id="submit"></button>
+                <label for="submit">Sign In</label>
+            </div>
+    </form>
+    <div class="sign-up-link">
+        <p>Don't have account? <a href="./sign_up.html">Sign Up</a></p>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.getElementById('form').addEventListener('submit', signin);
+    async function signin(e) {
+        e.preventDefault();
+        var email = document.getElementById('emai').value
+        var password = document.getElementById('passwor').value
+        var wrongpassword = document.getElementById('wrongpasswor');
+
+        const config = {
+            method: "POST",
+            url: "http://localhost:3000/user/login",
+            data: {
+                'email': email,
+                'password': password
+            }
+        }
+        await axios(config)
+            .then((searcha) => {
+                wrongpassword.innerHTML = "Logged in Successfully"
+                wrongpassword.style.color = 'green'
+                console.log("logged in")
+                localStorage.setItem('token',searcha.data.token)
+                window.location.href="./expenses.html"
+            }).catch((err) => {
+                if (err.response.status == 404) {
+                    wrongpassword.innerHTML = "User not found"
+                    wrongpassword.style.color = 'red'
+                    console.log("invalid email")
+                } else if (err.response.status == 401) {
+                    wrongpassword.innerHTML = "password is wrong"
+                    wrongpassword.style.color = 'red'
+                    console.log("wrong password")
+                }
+            })
+    }
+</script>
+</html>
