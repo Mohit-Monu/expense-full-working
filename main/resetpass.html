@@ -106,7 +106,7 @@
                 <header>Create password</header>
             </div>
             <div class="input-box">
-                <input type="text" class="input-field" placeholder="new password" autocomplete="off" required
+                <input type="password" class="input-field" placeholder="new password" autocomplete="off" required
                     id="password">
             </div>
             <div class="input-box">
@@ -122,48 +122,60 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-    var link=window.location.href;
-    var count=0;
-    var id="";
-    for(var i=0;i<link.length;i++){
-        if(link[i]=="/"){
+    var link = window.location.href;
+    var count = 0;
+    var id = "";
+    for (var i = 0; i < link.length; i++) {
+        if (link[i] == "/") {
             count++
         }
-        if(count==5){
-            id+=link[i]
+        if (count == 5) {
+            id += link[i]
         }
     }
-    var code=""
-    for(var i=0;i<id.length;i++){
-        if(i==0){
+    var code = ""
+    for (var i = 0; i < id.length; i++) {
+        if (i == 0) {
 
-        }else{
-            if(i==id.length-1){
-
-            }else{
-                code+=id[i]
+        } else {
+            if (i == id.length) {
+            } else {
+                code += id[i]
             }
         }
     }
-    console.log(code)
-    
     document.getElementById('form').addEventListener('submit', forgetpass)
-
-
     async function forgetpass(e) {
-
         var passwor = document.getElementById('password').value
         var passwor2 = document.getElementById('password2').value
+        var wrongpassword = document.getElementById('wrongpasswor')
         e.preventDefault()
-        if (passwor != passwor2) {
-            var wrongpassword = document.getElementById('wrongpasswor')
-            wrongpassword.innerHTML = "Password did not matched"
-            wrongpassword.style.color = "red"
-        } else {
-            console.log("true")
-            const data = await axios.get('http://localhost:3000/password/createpass/'+code);
-            
+        try {
+            if (passwor != passwor2) {
+                wrongpassword.innerHTML = "Password did not matched"
+                wrongpassword.style.color = "red"
+            } else {
+                const config = {
+                    method: "POST",
+                    url: 'http://localhost:3000/password/createpass',
+                    data: {
+                        uuid: code,
+                        newpass: passwor
+                    }
+                }
+                const data = await axios(config)
+                wrongpassword.innerHTML = "password changed successfully"
+                wrongpassword.style.color = 'green'
+                setTimeout(() => {
+                    window.location.href = "./expenses.html"
+                }, "2000");
+
+            }
+        } catch (err) {
+            wrongpassword.innerHTML = "Error in changing password"
+            wrongpassword.style.color = 'red'
         }
+
     }    
 </script>
 

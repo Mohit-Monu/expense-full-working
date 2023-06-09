@@ -2,10 +2,10 @@ const Sib = require("sib-api-v3-sdk");
 const Forgetpass = require("../models/forgetpasswordreq");
 const USERS = require("../models/user");
 const path = require("path");
-
+const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
-
 require("dotenv").config();
+
 async function resetpass(req, res) {
   await USERS.findAll({ where: { email: req.params.email } }).then((user) => {
     if (user.length != 0) {
@@ -53,10 +53,9 @@ async function uuidvalidater(req, res) {
     const id = req.params.uuid;
     await Forgetpass.findAll({ where: { id: id } }).then((user) => {
       if (user.length != 0) {
-        if(user[0].isactive==true){
+        if (user[0].isactive == true) {
           res.sendFile(path.join(__dirname, "../", "/main", "/resetpass.html"));
-
-        }else{
+        } else {
           res.sendFile(path.join(__dirname, "../", "/main", "/404.html"));
         }
       } else {
@@ -67,7 +66,39 @@ async function uuidvalidater(req, res) {
     console.log(err);
   }
 }
-async function createpass(req,res){
-
+async function createpass(req, res) {
+  const uuid = req.body.uuid;
+  const newpass = req.body.newpass;
+  await Forgetpass.findOne({ where: { id: uuid } })
+    .then(async (user) => {
+      user.update({ isactive: false });
+      await USERS.findOne({ where: { id: user.userId } })
+        .then(async (user) => {
+          const saltrounds = 10;
+          var pass = "";
+          bcrypt.hash(newpass, saltrounds, async (err, hash) => {
+            pass = hash;
+            user
+              .update({ password: pass })
+              .then(() => {
+                res
+                  .status(200)
+                  .json({ message: "password changed successfully" });
+              })
+              .catch((err) => {
+                throw new Error(JSON.stringify(err));
+              });
+            if (err) {
+              throw new Error(JSON.stringify(err));
+            }
+          });
+        })
+        .catch((err) => {
+          throw new Error(JSON.stringify(err));
+        });
+    })
+    .catch((err) => {
+      throw new Error(JSON.stringify(err));
+    });
 }
-module.exports = { resetpass, uuidvalidater,createpass };
+module.exports = { resetpass, uuidvalidater, createpass };

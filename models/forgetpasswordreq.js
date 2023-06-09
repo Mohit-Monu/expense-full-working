@@ -1,7 +1,7 @@
 const Sequelize=require('sequelize');
 const sequelize=require('../database');
 
-const expenses=sequelize.define('forgetpasswordrequest',
+const expenses=sequelize.define('forgetpasswordrequests',
 {
     id:{
         type:Sequelize.STRING,

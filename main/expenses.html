@@ -142,12 +142,22 @@
       butt.innerHTML = 'You are a premium user';
       butt.style.color = 'green'
       const butt2 = document.createElement('button');
+      const butt3 = document.createElement('button');
+
       butt2.id = 'show_leader';
       butt2.innerHTML = 'Show leaderboard';
       butt2.className = "buypre-btn"
+
+      butt3.id = 'down_report';
+      butt3.innerHTML = 'Download Report';
+      butt3.className = "buypre-btn"
       boax.appendChild(butt);
       boax.appendChild(butt2);
+      boax.appendChild(butt3);
+
       document.getElementById('show_leader').addEventListener('click', showleaderf);
+      document.getElementById('down_report').addEventListener('click', downloadrep);
+
     }
     var count = 0;
     result.forEach(element => {
@@ -252,7 +262,7 @@
       while (box.firstChild) {
         box.removeChild(box.firstChild);
       }
-       while (box2.firstChild) {
+      while (box2.firstChild) {
         box2.removeChild(box2.firstChild);
       }
       while (boax.firstChild) {
@@ -346,6 +356,10 @@
       tr.appendChild(td2);
       show_leader1.innerHTML = "Hide Leaderboard"
     });
+  }
+  async function downloadrep(){
+    window.location.href = "./downloadrep.html"
+
   }
 </script>
 
