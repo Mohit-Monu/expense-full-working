@@ -5,16 +5,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../public/signup.css">
+    <!-- <link rel="stylesheet" href="../public/downloadrep.css"> -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #dfdfdf;
+        }
+
+        .login-header {
+            text-align: center;
+            margin: 20px 0 40px 0;
+            color: #333;
+            font-size: 30px;
+            font-weight: 600;
+            margin-top: 50px;
+        }
+
+        .down {
+            position: absolute;
+            bottom: 5%;
+            right: 10%;
+        }
+
+        img {
+            height: 100px;
+            box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.05);
+            border-radius: 50%;
+        }
+
+        img:hover {
+            height: 120px;
+            transition: 0.5s;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="login-box">
-        <div class="login-header">
-            <header>Day to day Expenses</header>
-        </div>
+    <div class="login-header">
+        <header>Day to day Expenses</header>
     </div>
+    <div class="down">
+        <img src="../public/Eo_circle_green_arrow-down.svg.png" alt="">
+    </div>
+    <div id="data">
 
+    </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        pageloader();
+    })
+    async function pageloader() {
+        const token = localStorage.getItem('token');
+        const data = await axios.get('http://localhost:3000/premium/downrep', { headers: { "Authorization": token } })
+        document.getElementById('data').innerHTML=data
+        console.log(data)
+    }
+</script>
 
 </html>
