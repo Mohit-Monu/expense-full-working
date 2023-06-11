@@ -4,6 +4,8 @@ const User=require('./models/user')
 const Expense=require('./models/expenses')
 const Order=require('./models/order')
 const Forgetpasswordreq=require('./models/forgetpasswordreq')
+const generatedreports=require('./models/generatedreports')
+
 
 
 const bodyParser=require('body-parser');
@@ -35,6 +37,9 @@ Order.belongsTo(User);
 
 User.hasMany(Forgetpasswordreq);
 Forgetpasswordreq.belongsTo(User);
+
+User.hasMany(generatedreports);
+generatedreports.belongsTo(User);
 
 
 sequelize.sync(

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,26 +8,26 @@
     <style>
     </style>
 </head>
-
 <body>
     <center>
 
-    <div class="input-submit">
-        <button class="submit-btn" id="submit"></button>
-        <label for="submit">Go-Back</label>
-    </div>
-    <div class="login-header">
-        <header>Day to day Expenses</header>
-    </div>
+        <div class="input-submit">
+            <button class="submit-btn" id="submit"></button>
+            <label for="submit">Go-Back</label>
+        </div>
+        <div class="login-header">
+            <header>Day to day Expenses</header>
+        </div>
 
         <table class="styled-table" id="styled-table">
             <thead>
                 <tr>
                     <th>Sl.no</th>
-                    <th>Amount</th>
-                    <th>Description</th>
-                    <th>Category</th>
+                    <th>File name</th>
                     <th>Created at</th>
+                    <th>Download</th>
+
+
                 </tr>
             </thead>
             <tbody class="boxx" id="boxx">
@@ -47,57 +46,56 @@
             </tbody>
         </table>
     </center>
-    <div class="down">
-        <img id="downrep" src="../public/Eo_circle_green_arrow-down.svg.png" alt="">
-    </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 <script>
-    document.querySelector('.input-submit').addEventListener('click',moveback)
+    document.querySelector('.input-submit').addEventListener('click', moveback)
     var url = ""
-    document.querySelector('#downrep').addEventListener('click', downloadrep)
     window.addEventListener('DOMContentLoaded', () => {
         pageloader();
     })
     async function pageloader() {
-        const box = document.getElementById('boxx')
         const token = localStorage.getItem('token');
-        const data = await axios.get('http://localhost:3000/premium/downrep', { headers: { "Authorization": token } })
+        const data = await axios.get('http://localhost:3000/premium/downgenerep', { headers: { "Authorization": token } })
         console.log(data.data)
-        url = data.data.fileURl;
         var count = 0;
-        data.data.exp.forEach(element => {
+        data.data.search.forEach(element => {
             count++
             const box = document.getElementById('boxx')
-            console.log(element.id)
             const tr = document.createElement('tr');
             const td1 = document.createElement('td');
             const td2 = document.createElement('td');
             const td3 = document.createElement('td');
-            const td4 = document.createElement('td');
-            const td5 = document.createElement('td');
             if (count % 2 == 0) {
                 tr.className = "active-row"
             }
             td1.innerHTML = count;
-            td2.innerHTML = element.expenseamount;
-            td3.innerHTML = element.description;
-            td4.innerHTML = element.category;
-            td5.innerHTML = element.createdAt;
+            td2.innerHTML = element.filename;
+            td3.innerHTML = element.createdAt;
+            var delbtn = document.createElement('input');
+            var idstore = document.createElement('input');
+            delbtn.type = 'button'
+            delbtn.value = "Download"
+            delbtn.className = "delete-btn"
+            idstore.value = element.url
+            idstore.type = 'hidden'
             box.appendChild(tr);
+            tr.appendChild(idstore)
             tr.appendChild(td1)
             tr.appendChild(td2)
             tr.appendChild(td3)
-            tr.appendChild(td4)
-            tr.appendChild(td5)
+            tr.appendChild(delbtn)
+            delbtn.addEventListener('click', downf);
         });
     }
-    function downloadrep() {
-        window.location.href = url;
-    }
-    function moveback(){
+    function moveback() {
         window.location.href = "./expenses.html";
-
+    }
+    function downf(e) {
+        var par = e.target.parentElement;
+        var fc = par.firstChild;
+        var id = fc.value
+        window.location.href=id
     }
 </script>
 

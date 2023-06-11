@@ -112,6 +112,7 @@
   var box2 = document.querySelector("#boxx2");
   var thead = document.createElement('thead');
   var thead2 = document.createElement('thead');
+  var page=1;
 
   var expdet = document.getElementById('exp');
   var leadheadhead = document.getElementById('leadhead');
@@ -127,9 +128,9 @@
   })
   async function pageloader() {
     const token = localStorage.getItem('token');
-    const result1 = await axios.get('http://localhost:3000/expenses/load', { headers: { "Authorization": token } })
+    const result1 = await axios.get('http://localhost:3000/expenses/load/'+page, { headers: { "Authorization": token } })
     const result = result1.data.result
-    const user = result1.data.user[0].isPremiumUser
+    const user = result1.data.user.isPremiumUser
     if (user === false) {
       const butt = document.createElement('button');
       butt.id = 'buy_premium';
@@ -143,21 +144,30 @@
       butt.style.color = 'green'
       const butt2 = document.createElement('button');
       const butt3 = document.createElement('button');
+      const butt4 = document.createElement('button');
+
 
       butt2.id = 'show_leader';
       butt2.innerHTML = 'Show leaderboard';
       butt2.className = "buypre-btn"
 
       butt3.id = 'down_report';
-      butt3.innerHTML = 'Download Report';
-      butt3.className = "buypre-btn"
+      butt3.innerHTML = 'Generate And Download Report';
+      butt3.className = "buypre-btn2"
+
+      butt4.id = 'pastrep';
+      butt4.innerHTML = 'Download Past Generated Report';
+      butt4.className = "buypre-btn2"
+
       boax.appendChild(butt);
       boax.appendChild(butt2);
       boax.appendChild(butt3);
+      boax.appendChild(butt4);
+
 
       document.getElementById('show_leader').addEventListener('click', showleaderf);
       document.getElementById('down_report').addEventListener('click', downloadrep);
-
+      document.getElementById('pastrep').addEventListener('click', pastreports);
     }
     var count = 0;
     result.forEach(element => {
@@ -242,17 +252,6 @@
   }
   async function delall() {
     return new Promise((resolve, reject) => {
-
-      // var show_leader1 = document.getElementById("show_leader")
-      // if (show_leader1.innerHTML == 'Hide Leaderboard') {
-      //   show_leader1.innerHTML = "Show Leaderboard"
-      //   leadheadhead.innerHTML = ""
-      //   thead2.innerHTML = ""
-      //   box2.innerHTML = ""
-      //   expdet.innerHTML = ""
-      // }
-
-
       while (thead.firstChild) {
         thead.removeChild(thead.firstChild);
       }
@@ -359,6 +358,10 @@
   }
   async function downloadrep(){
     window.location.href = "./downloadrep.html"
+
+  }
+  async function pastreports(){
+    window.location.href = "./pastreports.html"
 
   }
 </script>

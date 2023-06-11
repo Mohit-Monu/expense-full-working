@@ -34,7 +34,8 @@ async function addexpense(req,res){
   }
   async function loadexpense(req,res){
     const search = await expenses.findAll({where:{userId:req.user.id}})
-    const user1=await USERS.findAll({where:{id:req.user.id}})
+    console.log(req.params.page)
+    const user1=await USERS.findOne({where:{id:req.user.id}})
     res.status(202).json({result:search,user:user1})
   }
   async function delexpenses(req,res){
