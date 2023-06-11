@@ -46,7 +46,7 @@
   <div id="buydiv">
   </div>
   <center>
-    <div class="input-box limit" >
+    <div class="input-box limit">
       <select id="limit" class="input-field" onchange="setlimit()">
         <option value="5">Select No of Limits per row default is 5</option>
         <option value="7">7</option>
@@ -84,6 +84,7 @@
         </tr> -->
       </tbody>
     </table>
+    <div class="pagination"></div>
     <br>
     <br>
     <div class="login-header">
@@ -123,7 +124,7 @@
   var box2 = document.querySelector("#boxx2");
   var thead = document.createElement('thead');
   var thead2 = document.createElement('thead');
-  var page=1;
+  var page = 1;
 
   var expdet = document.getElementById('exp');
   var leadheadhead = document.getElementById('leadhead');
@@ -134,17 +135,23 @@
 
   document.getElementById('addForm').addEventListener('submit', addele);
   const boax = document.getElementById('buydiv');
+  if(localStorage.getItem('limit')!==null){
+   
+  }else{
+    localStorage.setItem('limit', 5)
+
+  }
   window.addEventListener('DOMContentLoaded', () => {
-    localStorage.setItem('limit',1)
     pageloader();
   })
   async function pageloader() {
     const token = localStorage.getItem('token');
     const limit = localStorage.getItem('limit');
 
-    const result1 = await axios.get('http://localhost:3000/expenses/load/'+page+'/'+limit, { headers: { "Authorization": token } })
+    const result1 = await axios.get('http://localhost:3000/expenses/load/' + page + '/' + limit, { headers: { "Authorization": token } })
     const result = result1.data.result
     const user = result1.data.user.isPremiumUser
+    const pagination = result1.data.pagination.lastpage;
     if (user === false) {
       const butt = document.createElement('button');
       butt.id = 'buy_premium';
@@ -159,8 +166,6 @@
       const butt2 = document.createElement('button');
       const butt3 = document.createElement('button');
       const butt4 = document.createElement('button');
-
-
       butt2.id = 'show_leader';
       butt2.innerHTML = 'Show leaderboard';
       butt2.className = "buypre-btn"
@@ -172,7 +177,6 @@
       butt4.id = 'pastrep';
       butt4.innerHTML = 'Download Past Generated Report';
       butt4.className = "buypre-btn2"
-
       boax.appendChild(butt);
       boax.appendChild(butt2);
       boax.appendChild(butt3);
@@ -181,9 +185,44 @@
       document.getElementById('down_report').addEventListener('click', downloadrep);
       document.getElementById('pastrep').addEventListener('click', pastreports);
     }
-    loadexp(result);
+    loadexp(result, pagination);
   }
-  async function loadexp(result){
+  async function loadpagei(page) {
+    if (page == 1) {
+    } else {
+      for (var i = 1; i <= page; i++) {
+        const pagination1 = document.querySelector('.pagination');
+        const but = document.createElement('button')
+        but.innerHTML = i;
+        but.className = "pagibutt"
+        but.value = i
+        pagination1.appendChild(but)
+        but.addEventListener('click', pagei);
+      }
+    }
+  }
+  async function pagei(e) {
+    const pagination1 = document.querySelector('.pagination');
+
+    while (thead.firstChild) {
+      thead.removeChild(thead.firstChild);
+    }
+    while (box.firstChild) {
+      box.removeChild(box.firstChild);
+    }
+    while(pagination1.firstChild){
+      pagination1.removeChild(pagination1.firstChild)
+    }
+    const page = e.target.value
+    const token = localStorage.getItem('token');
+    const limit = localStorage.getItem('limit');
+    const result1 = await axios.get('http://localhost:3000/expenses/load/' + page + '/' + limit, { headers: { "Authorization": token } })
+    const result = result1.data.result
+    const pagination = result1.data.pagination.lastpage;
+    loadexp(result, pagination);
+
+  }
+  async function loadexp(result, pagination) {
     var count = 0;
     result.forEach(element => {
       count++;
@@ -237,6 +276,8 @@
       tr.appendChild(delbtn);
       delbtn.addEventListener('click', delf);
     });
+    loadpagei(pagination);
+
   }
   async function addele(e) {
     const token = localStorage.getItem('token');
@@ -266,7 +307,12 @@
     await pageloader();
   }
   async function delall() {
+    const pagination1 = document.querySelector('.pagination');
+
     return new Promise((resolve, reject) => {
+      while(pagination1.firstChild){
+      pagination1.removeChild(pagination1.firstChild)
+    }
       while (thead.firstChild) {
         thead.removeChild(thead.firstChild);
       }
@@ -371,17 +417,17 @@
       show_leader1.innerHTML = "Hide Leaderboard"
     });
   }
-  async function downloadrep(){
+  async function downloadrep() {
     window.location.href = "./downloadrep.html"
 
   }
-  async function pastreports(){
+  async function pastreports() {
     window.location.href = "./pastreports.html"
 
   }
-  function setlimit(){
-    var limits=document.getElementById('limit')
-    localStorage.setItem("limit",limits.value)
+  function setlimit() {
+    var limits = document.getElementById('limit')
+    localStorage.setItem("limit", limits.value)
   }
 </script>
 

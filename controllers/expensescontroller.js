@@ -1,6 +1,6 @@
 const expenses = require("../models/expenses");
 const USERS = require("../models/user");
-const sequelize=require('../database')
+const sequelize=require('../database');
 
 async function addexpense(req,res){
   const t = await sequelize.transaction();
@@ -33,18 +33,24 @@ async function addexpense(req,res){
     }
   }
   async function loadexpense(req,res){
-    const page=req.params.page
-    const limit=req.params.limit
+    var page=req.params.page
+    page=page/1
+    var limit=req.params.limit || 5
+    limit=limit/1
+    const noofexp=await expenses.count({where:{userId:req.user.id}});
     const search = await expenses.findAll(
-      {where:{userId:req.user.id},offset:(page-1)*limit,limit:limit}
-      
-      )
+      {where:{userId:req.user.id},offset:(page-1)*limit,limit:limit,order: [["id", "DESC"]]})
     // console.log(search.length)
-    // console.log(req.params.page)
-    // console.log(req.params.limit)
-
     const user1=await USERS.findOne({where:{id:req.user.id}})
-    res.status(202).json({result:search,user:user1})
+    res.status(202).json({result:search,user:user1,pagination:{
+      currentpage:page,
+      hasnextpage:limit*page<noofexp,
+      nextpage:page+1,
+      haspreviouspage:page>1,
+      previouspage:page-1,
+      totalitems:noofexp,
+      lastpage:Math.ceil(noofexp/limit),
+    }})
   }
   async function delexpenses(req,res){
   const t = await sequelize.transaction();
