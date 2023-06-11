@@ -46,6 +46,17 @@
   <div id="buydiv">
   </div>
   <center>
+    <div class="input-box limit" >
+      <select id="limit" class="input-field" onchange="setlimit()">
+        <option value="5">Select No of Limits per row default is 5</option>
+        <option value="7">7</option>
+        <option value="9">9</option>
+        <option value="13">13</option>
+        <option value="17">17</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+
     <div class="login-header">
       <header id="exp"></header>
     </div>
@@ -124,11 +135,14 @@
   document.getElementById('addForm').addEventListener('submit', addele);
   const boax = document.getElementById('buydiv');
   window.addEventListener('DOMContentLoaded', () => {
+    localStorage.setItem('limit',1)
     pageloader();
   })
   async function pageloader() {
     const token = localStorage.getItem('token');
-    const result1 = await axios.get('http://localhost:3000/expenses/load/'+page, { headers: { "Authorization": token } })
+    const limit = localStorage.getItem('limit');
+
+    const result1 = await axios.get('http://localhost:3000/expenses/load/'+page+'/'+limit, { headers: { "Authorization": token } })
     const result = result1.data.result
     const user = result1.data.user.isPremiumUser
     if (user === false) {
@@ -163,12 +177,13 @@
       boax.appendChild(butt2);
       boax.appendChild(butt3);
       boax.appendChild(butt4);
-
-
       document.getElementById('show_leader').addEventListener('click', showleaderf);
       document.getElementById('down_report').addEventListener('click', downloadrep);
       document.getElementById('pastrep').addEventListener('click', pastreports);
     }
+    loadexp(result);
+  }
+  async function loadexp(result){
     var count = 0;
     result.forEach(element => {
       count++;
@@ -363,6 +378,10 @@
   async function pastreports(){
     window.location.href = "./pastreports.html"
 
+  }
+  function setlimit(){
+    var limits=document.getElementById('limit')
+    localStorage.setItem("limit",limits.value)
   }
 </script>
 

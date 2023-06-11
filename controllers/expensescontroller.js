@@ -33,8 +33,16 @@ async function addexpense(req,res){
     }
   }
   async function loadexpense(req,res){
-    const search = await expenses.findAll({where:{userId:req.user.id}})
-    console.log(req.params.page)
+    const page=req.params.page
+    const limit=req.params.limit
+    const search = await expenses.findAll(
+      {where:{userId:req.user.id},offset:(page-1)*limit,limit:limit}
+      
+      )
+    // console.log(search.length)
+    // console.log(req.params.page)
+    // console.log(req.params.limit)
+
     const user1=await USERS.findOne({where:{id:req.user.id}})
     res.status(202).json({result:search,user:user1})
   }
