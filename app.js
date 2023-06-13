@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express=require('express')
+const path=require('path')
 const cors=require('cors');
 const User=require('./models/user')
 const Expense=require('./models/expenses')
@@ -16,12 +17,17 @@ const forgetpassRoutes=require('./routes/forgetpass')
 const app=express()
 app.use(cors())
 app.use(express.json()); 
+app.use(express.static(path.join(__dirname,"public"))); 
+
 app.use(bodyParser.urlencoded({ extended: false  }));
 app.use(userRoutes);
 app.use(expensesRoutes);
 app.use(orderRoutes);
 app.use(premiumRoutes);
 app.use(forgetpassRoutes);
+app.use((req,res)=>{
+    res.sendFile(path.join(__dirname,"main/"+req.url))
+})
 User.hasMany(Expense);
 Expense.belongsTo(User);
 User.hasMany(Order);
