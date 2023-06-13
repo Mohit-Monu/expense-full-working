@@ -2,7 +2,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const USERS = require("../models/user");
 const sequelize = require("../database");
-require("dotenv").config();
 
 function generateAccessToken(id, name) {
   return jwt.sign({ userId: id, userName: name }, process.env.TOKEN);

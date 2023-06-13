@@ -6,7 +6,6 @@ const sequelize = require("../database");
 const path = require("path");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
-require("dotenv").config();
 async function resetpass(req, res) {
   const t = await sequelize.transaction();
 

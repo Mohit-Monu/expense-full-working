@@ -1,7 +1,6 @@
 const Razorpay = require("razorpay");
 const Order = require("../models/order");
 const sequelize = require("../database");
-require("dotenv").config();
 
 async function buymembership(req, res) {
   const t = await sequelize.transaction();

@@ -1,4 +1,15 @@
 {
+  "name": "copy-of-the-day-today-expense-app",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js",
+    "dev":"nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
     "aws-sdk": "^2.1395.0",
     "bcrypt": "^5.1.0",

@@ -3,7 +3,6 @@ const Expenses = require("../models/expenses");
 const GENERATEDREPORTS = require("../models/generatedreports");
 const USERS = require("../models/user");
 const AWS = require("aws-sdk");
-require("dotenv").config();
 async function showleaderboard(req, res, next) {
   try {
     const user = await USERS.findAll({
