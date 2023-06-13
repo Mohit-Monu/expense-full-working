@@ -1,11 +1,7 @@
-const Sequelize=require('sequelize');
-const sequelize=new Sequelize(
-    'sign_up',
-    'root',
-    'Mohit@12345',
-    {
-        dialect:'mysql',
-        host:'localhost'
-    }
-);
-module.exports=sequelize;
+const Sequelize = require("sequelize");
+require("dotenv").config();
+const sequelize = new Sequelize(process.env.DB_NAME,process.env.DB_USERNAME,process.env.DB_PASSWORD, {
+  dialect: "mysql",
+  host: process.env.BD_HOST,
+});
+module.exports = sequelize;

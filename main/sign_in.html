@@ -8,6 +8,7 @@
     <title>SignIn</title>
     <link rel="stylesheet" href="../public/signup.css">
 </head>
+
 <body>
     <form id="form">
         <div class="login-box">
@@ -45,36 +46,42 @@
     document.getElementById('form').addEventListener('submit', signin);
     async function signin(e) {
         e.preventDefault();
-        var email = document.getElementById('emai').value
-        var password = document.getElementById('passwor').value
-        var wrongpassword = document.getElementById('wrongpasswor');
+        try {
+            var email = document.getElementById('emai').value
+            var password = document.getElementById('passwor').value
+            var wrongpassword = document.getElementById('wrongpasswor');
 
-        const config = {
-            method: "POST",
-            url: "http://localhost:3000/user/login",
-            data: {
-                'email': email,
-                'password': password
+            const config = {
+                method: "POST",
+                url: "http://localhost:3000/user/login",
+                data: {
+                    'email': email,
+                    'password': password
+                }
             }
-        }
-        await axios(config)
-            .then((searcha) => {
+            const searcha = await axios(config)
+            console.log(searcha)
+            if (searcha) {
                 wrongpassword.innerHTML = "Logged in Successfully"
                 wrongpassword.style.color = 'green'
                 console.log("logged in")
-                localStorage.setItem('token',searcha.data.token)
-                window.location.href="./expenses.html"
-            }).catch((err) => {
-                if (err.response.status == 404) {
-                    wrongpassword.innerHTML = "User not found"
-                    wrongpassword.style.color = 'red'
-                    console.log("invalid email")
-                } else if (err.response.status == 401) {
-                    wrongpassword.innerHTML = "password is wrong"
-                    wrongpassword.style.color = 'red'
-                    console.log("wrong password")
-                }
-            })
+                localStorage.setItem('token', searcha.data.token)
+                window.location.href = "./expenses.html"
+            }
+        } catch (err) {
+            if (err.response.status == 404) {
+                wrongpassword.innerHTML = "User not found"
+                wrongpassword.style.color = 'red'
+            } else if (err.response.status == 401) {
+                wrongpassword.innerHTML = "Password is wrong"
+                wrongpassword.style.color = 'red'
+            } else {
+                wrongpassword.innerHTML = "Something went wrong"
+                wrongpassword.style.color = 'red'
+            }
+        }
+
     }
 </script>
+
 </html>
