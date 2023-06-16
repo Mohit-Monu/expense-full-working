@@ -62,7 +62,7 @@
     async function pageloader() {
         const box = document.getElementById('boxx')
         const token = localStorage.getItem('token');
-        const data = await axios.get('http://54.145.27.178:3000/premium/downrep', { headers: { "Authorization": token } })
+        const data = await axios.get('http://3.80.151.107/premium/downrep', { headers: { "Authorization": token } })
         console.log(data.data)
         url = data.data.fileURl;
         var count = 0;

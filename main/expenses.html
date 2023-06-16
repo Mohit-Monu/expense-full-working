@@ -148,7 +148,7 @@
     const token = localStorage.getItem('token');
     const limit = localStorage.getItem('limit');
 
-    const result1 = await axios.get('http://54.145.27.178:3000/expenses/load/' + page + '/' + limit, { headers: { "Authorization": token } })
+    const result1 = await axios.get('http://3.80.151.107/expenses/load/' + page + '/' + limit, { headers: { "Authorization": token } })
     const result = result1.data.result
     const user = result1.data.user.isPremiumUser
     const pagination = result1.data.pagination.lastpage;
@@ -216,7 +216,7 @@
     const page = e.target.value
     const token = localStorage.getItem('token');
     const limit = localStorage.getItem('limit');
-    const result1 = await axios.get('http://54.145.27.178:3000/expenses/load/' + page + '/' + limit, { headers: { "Authorization": token } })
+    const result1 = await axios.get('http://3.80.151.107/expenses/load/' + page + '/' + limit, { headers: { "Authorization": token } })
     const result = result1.data.result
     const pagination = result1.data.pagination.lastpage;
     loadexp(result, pagination);
@@ -287,7 +287,7 @@
     var catego = document.getElementById('categ').value;
     const config = {
       method: 'POST',
-      url: 'http://54.145.27.178:3000/expenses/user',
+      url: 'http://3.80.151.107/expenses/user',
       data: {
         "amt": amou,
         "des": descr,
@@ -338,7 +338,7 @@
     var id = fc.value
     const config = {
       method: 'delete',
-      url: 'http://54.145.27.178:3000/expenses/del/' + id,
+      url: 'http://3.80.151.107/expenses/del/' + id,
       headers: { "Authorization": token }
     }
     const ans = await axios(config);
@@ -347,13 +347,13 @@
   }
   async function buypre() {
     const token = localStorage.getItem('token');
-    await axios.get('http://54.145.27.178:3000/purchase/membership', { headers: { 'Authorization': token } })
+    await axios.get('http://3.80.151.107/purchase/membership', { headers: { 'Authorization': token } })
       .then((result) => {
         var options = {
           "key": result.data.key_id,
           "order_id": result.data.order.id,
           "handler": async function (result) {
-            await axios.post('http://54.145.27.178:3000/purchase/updatetransaction', {
+            await axios.post('http://3.80.151.107/purchase/updatetransaction', {
               order_id: options.order_id,
               payment_id: result.razorpay_payment_id,
             }, { headers: { 'Authorization': token } })
@@ -373,7 +373,7 @@
   }
   async function showleaderf() {
     const token = localStorage.getItem('token');
-    const data = await axios.get("http://54.145.27.178:3000/premium/showleaderboard", { headers: { 'Authorization': token } })
+    const data = await axios.get("http://3.80.151.107/premium/showleaderboard", { headers: { 'Authorization': token } })
     var count = 0;
     var show_leader1 = document.getElementById("show_leader")
     if (show_leader1.innerHTML == "Hide Leaderboard") {
