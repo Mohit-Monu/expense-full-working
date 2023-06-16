@@ -39,7 +39,7 @@
     async function forgetpass(e) {
         e.preventDefault()
         try {
-            const data = await axios.post('http://localhost:3000/password/forgotpassword/' + email.value);
+            const data = await axios.post('http://54.145.27.178:3000/password/forgotpassword/' + email.value);
             wrongpassword.innerHTML = "Email sent successfully"
             wrongpassword.style.color = 'green'
         } catch (err) {
